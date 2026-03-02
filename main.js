@@ -1,4 +1,3 @@
-
 // Theme toggle logic
 const themeToggle = document.getElementById('theme-toggle');
 const currentTheme = localStorage.getItem('theme');
@@ -23,73 +22,73 @@ themeToggle.addEventListener('click', () => {
     }
 });
 
-class LottoNumbers extends HTMLElement {
+class DinnerMenu extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
     }
 
-    set numbers(numbers) {
+    set menu(name) {
         const style = `
-            .lotto-numbers-container {
+            .menu-container {
                 display: flex;
-            }
-            .lotto-number {
-                display: flex;
-                justify-content: center;
+                flex-direction: column;
                 align-items: center;
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
-                margin: 0 5px;
-                font-size: 1.2rem;
-                font-weight: bold;
-                color: white;
+                animation: fadeIn 0.5s ease-in-out;
+            }
+            .menu-name {
+                font-size: 2rem;
+                color: var(--text-color, #333);
+                padding: 1rem 2rem;
+                border: 2px solid #ff7272;
+                border-radius: 15px;
+                background-color: var(--container-bg, #fff);
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
             }
         `;
 
-        const numberElements = numbers.map(number => {
-            const ball = document.createElement('div');
-            ball.classList.add('lotto-number');
-            ball.textContent = number;
-            ball.style.backgroundColor = this.getColor(number);
-            return ball;
-        });
-
-        this.shadowRoot.innerHTML = `<style>${style}</style>`;
-        const container = document.createElement('div');
-        container.classList.add('lotto-numbers-container');
-        numberElements.forEach(el => container.appendChild(el));
-        this.shadowRoot.appendChild(container);
-    }
-
-    getColor(number) {
-        if (number <= 10) return '#fbc400';
-        if (number <= 20) return '#69c8f2';
-        if (number <= 30) return '#ff7272';
-        if (number <= 40) return '#aaa';
-        return '#b0d840';
+        this.shadowRoot.innerHTML = `
+            <style>${style}</style>
+            <div class="menu-container">
+                <div class="menu-name">${name}</div>
+            </div>
+        `;
     }
 }
 
-customElements.define('lotto-numbers', LottoNumbers);
+customElements.define('dinner-menu', DinnerMenu);
+
+const menus = [
+    "김치찌개 (Kimchi Stew)",
+    "불고기 (Bulgogi)",
+    "비빔밥 (Bibimbap)",
+    "치킨 (Fried Chicken)",
+    "피자 (Pizza)",
+    "파스타 (Pasta)",
+    "초밥 (Sushi)",
+    "타코 (Tacos)",
+    "스테이크 (Steak)",
+    "라멘 (Ramen)",
+    "돈까스 (Tonkatsu)",
+    "제육볶음 (Stir-fried Pork)",
+    "쌀국수 (Pho)",
+    "햄버거 (Hamburger)",
+    "떡볶이 (Tteokbokki)"
+];
 
 const generateBtn = document.getElementById('generate-btn');
-const lottoNumbersEl = document.querySelector('lotto-numbers');
+const menuDisplayEl = document.querySelector('dinner-menu');
 
-const generateNumbers = () => {
-    const numbers = new Set();
-    while (numbers.size < 6) {
-        numbers.add(Math.floor(Math.random() * 45) + 1);
-    }
-    return Array.from(numbers).sort((a, b) => a - b);
+const getRandomMenu = () => {
+    return menus[Math.floor(Math.random() * menus.length)];
 };
 
 generateBtn.addEventListener('click', () => {
-    const newNumbers = generateNumbers();
-    lottoNumbersEl.numbers = newNumbers;
+    menuDisplayEl.menu = getRandomMenu();
 });
 
-// Initial generation
-const initialNumbers = generateNumbers();
-lottoNumbersEl.numbers = initialNumbers;
+// Initial recommendation
+menuDisplayEl.menu = getRandomMenu();
