@@ -41,7 +41,43 @@ const menus = {
         "kimchi", "bulgogi", "bibimbap", "fried-chicken", "pizza",
         "pasta", "sushi", "taco", "steak", "ramen",
         "tonkatsu", "spicy-pork", "pho", "hamburger", "tteokbokki"
-    ]
+    ],
+    descriptions: {
+        en: [
+            "A spicy Korean stew made with fermented kimchi, pork, and tofu. Perfect for cold days!",
+            "Thinly sliced, marinated beef grilled to perfection. A classic Korean favorite.",
+            "A healthy bowl of rice topped with various vegetables, meat, and gochujang sauce.",
+            "Crispy, crunchy, and juicy fried chicken. Best enjoyed with a cold beer!",
+            "Cheesy goodness on a crispy crust with your favorite toppings.",
+            "Classic Italian noodles served with tomato, cream, or oil-based sauces.",
+            "Fresh vinegared rice topped with raw fish or seafood. A taste of Japan.",
+            "Mexican street food featuring tortillas filled with meat, salsa, and fresh herbs.",
+            "Juicy, tender grilled beef steak. A luxurious treat for dinner.",
+            "Savory Japanese noodle soup with rich broth and toppings like chashu pork.",
+            "Breaded, deep-fried pork cutlet. Crunchy on the outside, tender on the inside.",
+            "Spicy stir-fried pork with vegetables. Great with a bowl of steamed rice.",
+            "Vietnamese rice noodle soup with aromatic broth and fresh herbs.",
+            "Juicy beef patty in a soft bun with lettuce, tomato, and cheese.",
+            "Spicy, chewy rice cakes. A popular Korean street food snack."
+        ],
+        ko: [
+            "잘 익은 김치와 돼지고기, 두부를 넣고 끓인 얼큰한 한국인의 소울 푸드입니다.",
+            "얇게 썬 소고기를 달콤 짭짤한 양념에 재워 구운 한국의 대표 고기 요리입니다.",
+            "따뜻한 밥 위에 나물, 고기, 고추장, 계란후라이를 얹어 비벼 먹는 건강식입니다.",
+            "바삭바삭한 튀김옷과 육즙 가득한 속살! 맥주와 환상적인 궁합을 자랑합니다.",
+            "쫄깃한 도우 위에 토마토 소스와 치즈, 다양한 토핑이 어우러진 요리입니다.",
+            "토마토, 크림, 오일 등 다양한 소스로 맛을 낸 이탈리아의 대표 면 요리입니다.",
+            "신선한 생선회와 배합초로 간을 한 밥이 어우러진 일본의 대표 요리입니다.",
+            "옥수수 또띠아에 고기, 채소, 살사 소스를 싸서 먹는 멕시코의 맛입니다.",
+            "육즙을 가득 머금은 두툼한 소고기 구이. 특별한 날 저녁 메뉴로 제격입니다.",
+            "진한 육수에 쫄깃한 면발, 차슈와 계란을 곁들인 일본식 국수 요리입니다.",
+            "돼지고기에 빵가루를 입혀 바삭하게 튀겨낸 요리. 겉바속촉의 정석입니다.",
+            "매콤달콤한 양념에 돼지고기와 채소를 볶아낸 최고의 밥도둑 반찬입니다.",
+            "진한 고기 육수와 부드러운 쌀면, 향긋한 고수가 어우러진 베트남 국수입니다.",
+            "두툼한 패티와 신선한 채소를 부드러운 빵 사이에 끼운 든든한 한 끼입니다.",
+            "매콤달콤한 고추장 소스에 쫄깃한 떡을 볶아낸 국민 간식입니다."
+        ]
+    }
 };
 
 // State
@@ -94,7 +130,11 @@ const updateLanguage = (lang) => {
 
     // Update current menu if exists
     if (currentMenuIndex !== -1) {
-        menuDisplayEl.updateMenu(menus[currentLang][currentMenuIndex], menus.keywords[currentMenuIndex]);
+        menuDisplayEl.updateMenu(
+            menus[currentLang][currentMenuIndex], 
+            menus.keywords[currentMenuIndex],
+            menus.descriptions[currentLang][currentMenuIndex]
+        );
     }
 };
 
@@ -109,13 +149,15 @@ class DinnerMenu extends HTMLElement {
         this.attachShadow({ mode: 'open' });
     }
 
-    updateMenu(name, keyword) {
+    updateMenu(name, keyword, description) {
         const style = `
             .menu-container {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 animation: fadeIn 0.5s ease-in-out;
+                max-width: 500px;
+                margin: 0 auto;
             }
             .menu-image {
                 width: 100%;
@@ -130,11 +172,18 @@ class DinnerMenu extends HTMLElement {
             .menu-name {
                 font-size: 2rem;
                 color: var(--text-color, #333);
-                padding: 1rem 2rem;
-                border: 2px solid #ff7272;
-                border-radius: 15px;
-                background-color: var(--container-bg, #fff);
+                padding: 0.5rem 1rem;
                 font-weight: bold;
+                margin-bottom: 0.5rem;
+            }
+            .menu-description {
+                font-size: 1.1rem;
+                color: var(--text-color, #666);
+                line-height: 1.5;
+                padding: 1rem;
+                background-color: var(--container-bg);
+                border-radius: 10px;
+                margin-top: 0.5rem;
             }
             @keyframes fadeIn {
                 from { opacity: 0; transform: translateY(10px); }
@@ -150,6 +199,7 @@ class DinnerMenu extends HTMLElement {
             <div class="menu-container">
                 <img class="menu-image" src="${imageUrl}" alt="${name}">
                 <div class="menu-name">${name}</div>
+                <div class="menu-description">${description || ''}</div>
             </div>
         `;
     }
@@ -167,7 +217,11 @@ const getRandomMenuIndex = () => {
 
 generateBtn.addEventListener('click', () => {
     currentMenuIndex = getRandomMenuIndex();
-    menuDisplayEl.updateMenu(menus[currentLang][currentMenuIndex], menus.keywords[currentMenuIndex]);
+    menuDisplayEl.updateMenu(
+        menus[currentLang][currentMenuIndex], 
+        menus.keywords[currentMenuIndex],
+        menus.descriptions[currentLang][currentMenuIndex]
+    );
 });
 
 // Initialize language
@@ -175,4 +229,8 @@ updateLanguage(currentLang);
 
 // Initial recommendation
 currentMenuIndex = getRandomMenuIndex();
-menuDisplayEl.updateMenu(menus[currentLang][currentMenuIndex], menus.keywords[currentMenuIndex]);
+menuDisplayEl.updateMenu(
+    menus[currentLang][currentMenuIndex], 
+    menus.keywords[currentMenuIndex],
+    menus.descriptions[currentLang][currentMenuIndex]
+);
