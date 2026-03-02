@@ -64,6 +64,13 @@ body {
     border-top: 1px solid var(--shadow-color);
 }
 
+.comments-section {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--shadow-color);
+    text-align: left;
+}
+
 .contact-heading {
     font-size: 1.5rem;
     margin-bottom: 1rem;
