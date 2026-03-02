@@ -28,6 +28,11 @@ const menus = {
         "김치찌개", "불고기", "비빔밥", "치킨", "피자",
         "파스타", "초밥", "타코", "스테이크", "라멘",
         "돈까스", "제육볶음", "쌀국수", "햄버거", "떡볶이"
+    ],
+    keywords: [
+        "kimchi", "bulgogi", "bibimbap", "fried-chicken", "pizza",
+        "pasta", "sushi", "taco", "steak", "ramen",
+        "tonkatsu", "spicy-pork", "pho", "hamburger", "tteokbokki"
     ]
 };
 
@@ -74,7 +79,7 @@ const updateLanguage = (lang) => {
 
     // Update current menu if exists
     if (currentMenuIndex !== -1) {
-        menuDisplayEl.menu = menus[currentLang][currentMenuIndex];
+        menuDisplayEl.updateMenu(menus[currentLang][currentMenuIndex], menus.keywords[currentMenuIndex]);
     }
 };
 
@@ -89,13 +94,23 @@ class DinnerMenu extends HTMLElement {
         this.attachShadow({ mode: 'open' });
     }
 
-    set menu(name) {
+    updateMenu(name, keyword) {
         const style = `
             .menu-container {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 animation: fadeIn 0.5s ease-in-out;
+            }
+            .menu-image {
+                width: 100%;
+                max-width: 400px;
+                height: 300px;
+                object-fit: cover;
+                border-radius: 15px;
+                margin-bottom: 1.5rem;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                border: 3px solid #ff7272;
             }
             .menu-name {
                 font-size: 2rem;
@@ -104,6 +119,7 @@ class DinnerMenu extends HTMLElement {
                 border: 2px solid #ff7272;
                 border-radius: 15px;
                 background-color: var(--container-bg, #fff);
+                font-weight: bold;
             }
             @keyframes fadeIn {
                 from { opacity: 0; transform: translateY(10px); }
@@ -111,9 +127,13 @@ class DinnerMenu extends HTMLElement {
             }
         `;
 
+        // Using loremflickr for food images based on keywords
+        const imageUrl = `https://loremflickr.com/400/300/food,${keyword}`;
+
         this.shadowRoot.innerHTML = `
             <style>${style}</style>
             <div class="menu-container">
+                <img class="menu-image" src="${imageUrl}" alt="${name}">
                 <div class="menu-name">${name}</div>
             </div>
         `;
@@ -132,7 +152,7 @@ const getRandomMenuIndex = () => {
 
 generateBtn.addEventListener('click', () => {
     currentMenuIndex = getRandomMenuIndex();
-    menuDisplayEl.menu = menus[currentLang][currentMenuIndex];
+    menuDisplayEl.updateMenu(menus[currentLang][currentMenuIndex], menus.keywords[currentMenuIndex]);
 });
 
 // Initialize language
@@ -140,4 +160,4 @@ updateLanguage(currentLang);
 
 // Initial recommendation
 currentMenuIndex = getRandomMenuIndex();
-menuDisplayEl.menu = menus[currentLang][currentMenuIndex];
+menuDisplayEl.updateMenu(menus[currentLang][currentMenuIndex], menus.keywords[currentMenuIndex]);
