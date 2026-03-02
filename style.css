@@ -58,10 +58,15 @@ body {
     transition: background-color 0.3s, color 0.3s;
 }
 
-.theme-toggle {
+.controls {
     position: fixed;
     top: 1rem;
     right: 1rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.control-btn {
     padding: 0.5rem;
     cursor: pointer;
     background-color: var(--container-bg);

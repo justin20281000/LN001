@@ -4,13 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dinner Menu Recommender</title>
+    <title id="page-title">Dinner Menu Recommender</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <button id="theme-toggle" class="theme-toggle">Dark Mode</button>
+    <div class="controls">
+        <button id="theme-toggle" class="control-btn">Dark Mode</button>
+        <button id="lang-toggle" class="control-btn">한국어</button>
+    </div>
     <div class="container">
-        <h1>What's for Dinner?</h1>
+        <h1 id="main-heading">What's for Dinner?</h1>
         <div class="menu-display">
             <dinner-menu></dinner-menu>
         </div>
