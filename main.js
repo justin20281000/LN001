@@ -142,7 +142,8 @@ class DinnerMenu extends HTMLElement {
             }
         `;
 
-        const imageUrl = `https://loremflickr.com/400/300/food,${keyword}`;
+        // Using local images from the /images folder
+        const imageUrl = `images/${keyword}.jpg`;
 
         this.shadowRoot.innerHTML = `
             <style>${style}</style>
