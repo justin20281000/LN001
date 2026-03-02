@@ -6,7 +6,11 @@ const translations = {
         generateBtn: "Recommend Menu",
         themeDark: "Dark Mode",
         themeLight: "Light Mode",
-        langBtn: "한국어"
+        langBtn: "한국어",
+        contactHeading: "Affiliate Inquiry",
+        contactEmailPlaceholder: "Your Email",
+        contactMessagePlaceholder: "Your Message",
+        contactSubmit: "Send Inquiry"
     },
     ko: {
         pageTitle: "저녁 메뉴 추천",
@@ -14,7 +18,11 @@ const translations = {
         generateBtn: "메뉴 추천받기",
         themeDark: "다크 모드",
         themeLight: "라이트 모드",
-        langBtn: "English"
+        langBtn: "English",
+        contactHeading: "제휴 문의",
+        contactEmailPlaceholder: "이메일 주소",
+        contactMessagePlaceholder: "문의 내용",
+        contactSubmit: "문의 보내기"
     }
 };
 
@@ -75,6 +83,13 @@ const updateLanguage = (lang) => {
     document.getElementById('main-heading').textContent = translations[lang].mainHeading;
     document.getElementById('generate-btn').textContent = translations[lang].generateBtn;
     langToggle.textContent = translations[lang].langBtn;
+    
+    // Update contact form text
+    document.getElementById('contact-heading').textContent = translations[lang].contactHeading;
+    document.getElementById('contact-email').placeholder = translations[lang].contactEmailPlaceholder;
+    document.getElementById('contact-message').placeholder = translations[lang].contactMessagePlaceholder;
+    document.getElementById('contact-submit').textContent = translations[lang].contactSubmit;
+    
     updateThemeBtnText();
 
     // Update current menu if exists
@@ -127,7 +142,6 @@ class DinnerMenu extends HTMLElement {
             }
         `;
 
-        // Using loremflickr for food images based on keywords
         const imageUrl = `https://loremflickr.com/400/300/food,${keyword}`;
 
         this.shadowRoot.innerHTML = `
